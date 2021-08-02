@@ -23,7 +23,7 @@ ml = 0
 contar = 0
 click_lectura = 0
 clik_stop = 0
-clik_inicio =
+clik_inicio = 0
 
 nombre1,apellido1,edad1,correo1,telefono1 = [],[],[],[],[]
 
