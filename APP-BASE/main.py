@@ -84,15 +84,15 @@ try:
               df = pd.read_excel(exl1)
 
               valores = df[["DIA", "T4", "Repeticiones"]]
-              df1 = valores.plot.bar(x="DIA", y="T4", rot=10)
-              plt.show()
+              #df1 = valores.plot.bar(x="DIA", y="T4", rot=10)
+              #plt.show()
               repeti = df[["Repeticiones"]]
               print(repeti)
 
-              figure1 = plt.Figure(figsize=(4.8, 2.5), dpi=70, )
+              figure1 = plt.Figure(figsize=(4, 3.5), dpi=70, )
               ax1 = figure1.add_subplot(111)
               bar1 = FigureCanvasTkAgg(figure1, root)
-              bar1.get_tk_widget().place(x=920, y=545)
+              bar1.get_tk_widget().place(x=20, y=60)
               df1 = valores[['DIA', 'Repeticiones']].groupby('DIA').sum()
               df1.plot(kind='bar', color='blue', legend=False, ax=ax1)
 
@@ -121,14 +121,14 @@ try:
               valores = df[["DIA", "mejor_tiempo"]]
               mt = df[["mejor_tiempo"]]
               print(mt)
-              df1 = valores.plot.bar(x="DIA", y="mejor_tiempo", rot=10)
+              #df1 = valores.plot.bar(x="DIA", y="mejor_tiempo", rot=10)
 
-              plt.show()
+              #plt.show()
 
-              figure1 = plt.Figure(figsize=(4.8, 3.5), dpi=70)
+              figure1 = plt.Figure(figsize=(4, 3.5), dpi=70)
               ax1 = figure1.add_subplot(111)
               bar1 = FigureCanvasTkAgg(figure1, root)
-              bar1.get_tk_widget().place(x=920, y=300)
+              bar1.get_tk_widget().place(x=980, y=300)
               df1 = valores[['DIA', 'mejor_tiempo']].groupby('DIA').sum()
               df1.plot(kind='bar', color='purple', legend=False, ax=ax1)
 
@@ -158,14 +158,14 @@ try:
               tiempos = df[["T1", "T2", "T3", "T4"]]
               print(tiempos)
 
-              df1 = tiempos.plot.bar(rot=10)
+              #df1 = tiempos.plot.bar(rot=10)
 
-              plt.show()
+              #plt.show()
 
-              figure1 = plt.Figure(figsize=(4.8, 3.5), dpi=70, edgecolor='white')
+              figure1 = plt.Figure(figsize=(4, 3.5), dpi=70, edgecolor='white')
               ax1 = figure1.add_subplot(111)
               bar1 = FigureCanvasTkAgg(figure1, root)
-              bar1.get_tk_widget().place(x=920, y=63)
+              bar1.get_tk_widget().place(x=980, y=63)
               tiempos.plot(kind='bar', legend=True, ax=ax1)
 
               figure1.set_facecolor("white")
@@ -207,9 +207,25 @@ try:
               print(todo)
 
               fig, ax = plt.subplots(3)
-              ax[0].plot(dia,mt)
+              fig.set_facecolor("indigo")
+              ax[0].plot(dia,mt, 'tab:green')
+              ax[0].set_title('Mejor Tiempo por dia', color="white")
+              ax[0].grid()
+              ax[0].tick_params(axis='x', colors='white')
+              ax[0].tick_params(axis='y', colors='white')
+
               ax[1].plot(dia,repe)
-              ax[2].plot(dia,todo)
+              ax[1].set_title('Repeticiones por dia', color="white")
+              ax[1].grid()
+              ax[1].tick_params(axis='x', colors='white')
+              ax[1].tick_params(axis='y', colors='white')
+
+              ax[2].plot(todo)
+              ax[2].set_title('Todos los tiempos', color="white")
+              ax[2].grid()
+              ax[2].tick_params(axis='x', colors='white')
+              ax[2].tick_params(axis='y', colors='white')
+
 
 
 
@@ -290,18 +306,13 @@ try:
 
           cap = None
           cap2 = None
-          btnIniciar1 = Button(root, text="Ampliar", width=10, fg='white', bg='indigo', command=ventanacam)
-          btnIniciar1.place(x=753, y=370)
-          btnIniciar = Button(root, text="Iniciar", fg='white', bg='indigo', width=10, command=iniciar)
-          btnIniciar.place(x=753, y=470)
-          btnFinalizar = Button(root, text="Finalizar", fg='white', bg='indigo', width=10, command=finalizar)
-          btnFinalizar.place(x=753, y=500)
 
           lblVideo = Label(root)
-          lblVideo.place(x=30, y=95)
-
+          lblVideo.place(x=300, y=70)
           file_frame = tk.LabelFrame(bg='MediumPurple4')
-          file_frame.place(height=180, width=730, rely=0.72, relx=0.02)
+          file_frame.place(height=180, width=1230, rely=0.72, relx=0.02)
+          file_frame1 = tk.LabelFrame(bg='MediumPurple4')
+          file_frame1.place(height=210, width=275, rely=0.43, relx=0.02)
           position = tk.LabelFrame(file_frame, bg='MediumPurple4', fg='white')
           position.place(height=170, width=720, relx=0.005, rely=0.015)
           LABEL = tk.Label(position, bg='indigo', fg='white', bd='8',
@@ -354,6 +365,9 @@ try:
                               command=lambda: todosgraficos())
           button6.place(rely=0.45, relx=0.85)
 
+          btnIniciar = Button(file_frame, text="Iniciar", fg='white', bg='indigo', width=10, command=iniciar)
+          btnIniciar.place(rely=0.45, relx=0.85)
+
           lb1 = Label(root, text='NOMBRE', bg='indigo', fg='white').place(rely=0.02, relx=0.30)
           entry1 = Entry(root, width=13, font=('Arial', 8))
           entry1.place(rely=0.02, relx=0.35)
@@ -362,17 +376,59 @@ try:
           entry2 = Entry(root, width=13, font=('Arial', 8))
           entry2.place(rely=0.02, relx=0.5)
 
-          def takeScreenshot():
+          def start():
+              global running
+              if not running:
+                  update()
+                  running = True
 
-              myScreenshot = pyautogui.screenshot()
+          # pause function
+          def pause():
+              global running
+              if running:
+                  stopwatch_label.after_cancel(update_time)
+                  running = False
 
-              file_path = filedialog.asksaveasfilename(defaultextension='.png')
+          # reset function
+          def reset():
+              global running
+              if running:
+                  stopwatch_label.after_cancel(update_time)
+                  running = False
+              global minutes, seconds
+              minutes, seconds = 0, 0
+              stopwatch_label.config(text='00:00')
 
-              myScreenshot.save(file_path)
+          # update stopwatch function
+          def update():
+              global hours, minutes, seconds
+              seconds += 1
+              if seconds == 60:
+                  minutes += 1
+                  seconds = 0
+              if minutes == 60:
+                  hours += 1
+                  minutes = 0
+              minutes_string = f'{minutes}' if minutes > 9 else f'0{minutes}'
+              seconds_string = f'{seconds}' if seconds > 9 else f'0{seconds}'
+              # update timer label after 1000 ms (1 second)
+              stopwatch_label.config(text=minutes_string + ':' + seconds_string)
+              # after each second (1000 milliseconds), call update function
+              # use update_time variable to cancel or pause the time using after_cancel
+              global update_time
+              update_time = stopwatch_label.after(1000, update)
 
-          myButton = tk.Button(text="GUARDAR CAPTURA", command=takeScreenshot, bg='green', fg='white', font=10)
-          myButton.place(rely=0.02, relx=0.80)
+          # label to display time
+          stopwatch_label = Label(file_frame1, text='00:00', font=('Arial', 40))
+          stopwatch_label.pack()
 
+          # start, pause, reset, quit buttons
+          start_button = tk.Button(file_frame1, text='start', height=3, width=6, font=('Arial'), command=start)
+          start_button.place(rely=0.5, relx=0.2)
+          pause_button = tk.Button(file_frame1, text='pause', height=3, width=6, font=('Arial'), command=pause)
+          pause_button.place(rely=0.5, relx=0.4)
+          reset_button = tk.Button(file_frame1, text='reset', height=3, width=6, font=('Arial'), command=reset)
+          reset_button.place(rely=0.5, relx=0.6)
           self.image = Image.open("C:fondorespo.png")
           self.img_copy = self.image.copy()
 
@@ -400,99 +456,3 @@ try:
 
 except:
   print("Contraseña o Email invalido")
-"""
-  # ***** VARIABLES *****
-  # use a boolean variable to help control state of time (running or not running)
-  running = False
-  # time variables initially set to 0
-  hours, minutes, seconds = 0, 0, 0
-
-
-  # ***** NOTES ON GLOBAL *****
-  # global will be used to modify variables outside functions
-  # another option would be to use a class and subclass Frame
-
-  # ***** FUNCTIONS *****
-  # start, pause, and reset functions will be called when the buttons are clicked
-  # start function
-  def start():
-      global running
-      if not running:
-          update()
-          running = True
-
-
-  # pause function
-  def pause():
-      global running
-      if running:
-          # cancel updating of time using after_cancel()
-          stopwatch_label.after_cancel(update_time)
-          running = False
-
-
-  # reset function
-  def reset():
-      global running
-      if running:
-          # cancel updating of time using after_cancel()
-          stopwatch_label.after_cancel(update_time)
-          running = False
-      # set variables back to zero
-      global minutes, seconds
-      minutes, seconds = 0, 0
-      # set label back to zero
-      stopwatch_label.config(text='00:00')
-
-
-  # update stopwatch function
-  def update():
-      # update seconds with (addition) compound assignment operator
-      global hours, minutes, seconds
-      seconds += 1
-      if seconds == 60:
-          minutes += 1
-          seconds = 0
-      if minutes == 60:
-          hours += 1
-          minutes = 0
-      # format time to include leading zeros
-      minutes_string = f'{minutes}' if minutes > 9 else f'0{minutes}'
-      seconds_string = f'{seconds}' if seconds > 9 else f'0{seconds}'
-      # update timer label after 1000 ms (1 second)
-      stopwatch_label.config(text=minutes_string + ':' + seconds_string)
-      # after each second (1000 milliseconds), call update function
-      # use update_time variable to cancel or pause the time using after_cancel
-      global update_time
-      update_time = stopwatch_label.after(1000, update)
-
-
-  # ***** WIDGETS *****
-  # create main window
-  c = tk.Tk()
-  c.geometry('350x220')
-  c.title('Stopwatch')
-
-  # label to display time
-  stopwatch_label = tk.Label(c, text='00:00', font=('Arial', 80))
-  stopwatch_label.pack()
-
-  # start, pause, reset, quit buttons
-  start_button = tk.Button(c, text='start', height=5, width=7, font=('Arial', 20), command=start)
-  start_button.pack(side=tk.LEFT)
-  pause_button = tk.Button(c, text='pause', height=5, width=7, font=('Arial', 20), command=pause)
-  pause_button.pack(side=tk.LEFT)
-  reset_button = tk.Button(c, text='reset', height=5, width=7, font=('Arial', 20), command=reset)
-  reset_button.pack(side=tk.LEFT)
-
-  # ***** MAINLOOP *****
-  # run app
-  c.mainloop()
-  
-  root.mainloop()
-
-
-except:
-  print("Contraseña o Email invalido")
-  """
-
